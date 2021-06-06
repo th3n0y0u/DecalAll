@@ -81,9 +81,9 @@ function mainclass()
 					end 
 				end 
 			end
+      else 
+      print("no u")
 		end
-    else
-    print("no")
 	end
 	script.Parent.BentMe.MouseButton1Down:Connect(fired)
 	script.Parent.BentAll.MouseButton1Down:Connect(bentall)
