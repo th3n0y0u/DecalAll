@@ -85,9 +85,57 @@ function mainclass()
       print("no u")
 		end
 	end
+
+	local function unfired()
+		
+		local player = script.Parent.Parent.Parent.Parent
+		
+		for _,v in pairs(player.Character:GetChildren()) do
+			local target = player.Character:FindFirstChild(tostring(v))
+			if target.Name ~= "HumanoidRootPart" then
+				for v = 1,6,1 do
+					local delete = target:FindFirstChild("Decal")
+					delete:Destroy()
+				end
+			end
+		end
+	end
+	
+	local function unbent()
+		local playerid = Players:FindFirstChild(tostring(script.Parent.TextBox2.Text))
+		if playerid ~= nil then
+			for _,v in pairs(playerid.Character:GetChildren()) do
+				local target = playerid.Character:FindFirstChild(tostring(v))
+				if target.Name ~= "HumanoidRootPart" then
+					for v = 1,6,1 do
+						local delete = target:FindFirstChild("Decal")
+						delete:Destroy()
+					end
+				end
+			end
+		end
+	end
+	
+	local function unbentall()
+		for i, player in pairs(Players:GetPlayers()) do
+			for _,v in pairs(player.Character:GetChildren()) do
+				local target = player.Character:FindFirstChild(tostring(v))
+				if target.Name ~= "HumanoidRootPart" then
+					for v = 1,6,1 do
+						local delete = target:FindFirstChild("Decal")
+						delete:Destroy()
+					end
+				end
+			end
+		end
+	end
+	
 	script.Parent.BentMe.MouseButton1Down:Connect(fired)
 	script.Parent.BentAll.MouseButton1Down:Connect(bentall)
 	script.Parent.TextBox.FocusLost:Connect(bent)
+	script.Parent.UnBentMe.MouseButton1Down:Connect(unfired)
+	script.Parent.UnBentAll.MouseButton1Down:Connect(unbentall)
+	script.Parent.TextBox2.FocusLost:Connect(unbent) 
 	
 end
 	
