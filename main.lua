@@ -1,144 +1,126 @@
 local Players = game:GetService("Players")
 
+local debounce = false
+
+local canGive = false
+
+local player = script.Parent.Parent.Parent.Parent
+
+local tool = game.ReplicatedStorage:FindFirstChild("HyperlaserGun")
+
 function mainclass()
+
+	local function sound()
+		local freeze = Instance.new("Sound")
+		freeze.Name = "FreezeSound"
+		freeze.SoundId = "rbxassetid://2364677393" 
+		freeze.PlaybackSpeed = 1
+		freeze.Volume = 1
+		freeze:Play()
+		coroutine.resume(coroutine.create(function()
+			wait(freeze.TimeLength) 
+			freeze:Destroy()
+		end) )
+	end
 	
-	local function fired()
-		 
-		local player = script.Parent.Parent.Parent.Parent
-		
-		for _, v in pairs(player.Character:GetChildren()) do
-			local target = player.Character:FindFirstChild(tostring(v))
-			for v = 1,6,1 do
-				local decal = Instance.new("Decal")
-				decal.Texture = "rbxassetid://6919855618"
-				decal.Parent = target
-				if v == 1 then
-					decal.Face = "Front"
-				elseif v == 2 then
-					decal.Face = "Back"
-				elseif v == 3 then
-					decal.Face = "Bottom"
-				elseif v == 4 then
-					decal.Face = "Top"
-				elseif v == 5 then
-					decal.Face = "Right"
-				elseif v == 6 then
-					decal.Face = "Left"
+	local function onentered(player, text)
+		if debounce == false then
+			if game.Players:FindFirstChild(text) then
+				local target = game.Players:FindFirstChild(text)
+				if target.Character ~= nil then
+					if tostring(target) ~= script.Parent.Parent.Parent.Parent.Name then
+						target.Character.HumanoidRootPart.Anchored = true
+					elseif tostring(target) == script.Parent.Parent.Parent.Parent.Name then
+						print("stop freezing yourself nerd")
+					end
+				else
+					print("stop it")
 				end
 			end
 		end
 	end
 	
-	local function bentall()
-		
+	local function notonentered(player, text)
+		if debounce == false then
+			if game.Players:FindFirstChild(text) then
+				local target = game.Players:FindFirstChild(text)
+				if target.Character ~= nil then
+					if tostring(target) ~= script.Parent.Parent.Parent.Parent.Name then
+						target.Character.HumanoidRootPart.Anchored = false
+					elseif tostring(target) == script.Parent.Parent.Parent.Parent.Name then
+						print("stop unfreezing yourself nerd")
+					end
+				else
+					print("stop it")
+				end
+			end
+		end
+	end
+	
+	local function fired2()
+		script.Parent.FreezeAllPlayers.Text = "INITALIZING..."
+		wait(3)
 		for i, player in pairs(Players:GetPlayers()) do
-			for _,v in pairs(player.Character:GetChildren()) do
-				local target = player.Character:FindFirstChild(tostring(v))
-				for v = 1,6,1 do
-					local decal = Instance.new("Decal")
-					decal.Texture = "rbxassetid://6919855618"
-					decal.Parent = target
-					if v == 1 then
-						decal.Face = "Front"
-					elseif v == 2 then
-						decal.Face = "Back"
-					elseif v == 3 then
-						decal.Face = "Bottom"
-					elseif v == 4 then
-						decal.Face = "Top"
-					elseif v == 5 then
-						decal.Face = "Right"
-					elseif v == 6 then
-						decal.Face = "Left"
-					end 
-				end
+			if player.Name ~= script.Parent.Parent.Parent.Parent.Name then
+				player.Character.HumanoidRootPart.Anchored = true
+			elseif player.Name == script.Parent.Parent.Parent.Parent.Name then
+				print("No freezing yourself.")
 			end
 		end
+		wait(3)
+		script.Parent.FreezeAllPlayers.Text = "Fired.."
+		sound()
+		wait(1.5)
+		script.Parent.FreezeAllPlayers.Text = "FREEZE ALL PLAYERS"
 	end
-	
-	local function bent()
-		
-		local playerid = Players:FindFirstChild(tostring(script.Parent.TextBox.Text))
-		if playerid ~= nil then
-			for _,v in pairs(playerid.Character:GetChildren()) do
-				local target = playerid.Character:FindFirstChild(tostring(v))
-				for v = 1,6,1 do
-					local decal = Instance.new("Decal")
-					decal.Texture = "rbxassetid://6919855618"
-					decal.Parent = target
-					if v == 1 then
-						decal.Face = "Front"
-					elseif v == 2 then
-						decal.Face = "Back"
-					elseif v == 3 then
-						decal.Face = "Bottom"
-					elseif v == 4 then
-						decal.Face = "Top"
-					elseif v == 5 then
-						decal.Face = "Right"
-					elseif v == 6 then
-						decal.Face = "Left"
-					end 
-				end 
+
+	local function fired()
+		script.Parent.FreezeAllPlayers.Text = "Are you sure that you want to do this?"
+		script.Parent.FreezeAllPlayers.MouseButton1Down:Connect(function(click)
+			fired2() 
+		end)
+	end
+
+	local function unfired2()
+		script.Parent.UnFreezeAllPlayers.Text = "INITALIZING..."
+		wait(3)
+		for i, player in pairs(Players:GetPlayers()) do
+			if player.Name ~= script.Parent.Parent.Parent.Parent.Name then
+				player.Character.HumanoidRootPart.Anchored = false
+			elseif player.Name == script.Parent.Parent.Parent.Parent.Name then
+				print("No unfreezing yourself.")
 			end
-      else 
-      print("no u")
 		end
+		wait(3)
+		script.Parent.UnFreezeAllPlayers.Text = "Fired.."
+		wait(1.5)
+		script.Parent.UnFreezeAllPlayers.Text = "UNFREEZE ALL PLAYERS"
 	end
 
 	local function unfired()
-		
-		local player = script.Parent.Parent.Parent.Parent
-		
-		for _,v in pairs(player.Character:GetChildren()) do
-			local target = player.Character:FindFirstChild(tostring(v))
-			if target.Name ~= "HumanoidRootPart" then
-				for v = 1,6,1 do
-					local delete = target:FindFirstChild("Decal")
-					delete:Destroy()
-				end
+		script.Parent.UnFreezeAllPlayers.Text = "Are you sure that you want to do this?"
+		script.Parent.UnFreezeAllPlayers.MouseButton1Down:Connect(function(click)
+			unfired2() 
+		end)
+	end 
+	
+	local function item(player, text)
+		if canGive == false then
+			canGive = true
+			for v = 1, tonumber(text), 1 do
+				local clone = tool:Clone()
+				clone.Parent = player.Backpack 
 			end
+			wait(1)
+			canGive = false
 		end
 	end
-	
-	local function unbent()
-		local playerid = Players:FindFirstChild(tostring(script.Parent.TextBox2.Text))
-		if playerid ~= nil then
-			for _,v in pairs(playerid.Character:GetChildren()) do
-				local target = playerid.Character:FindFirstChild(tostring(v))
-				if target.Name ~= "HumanoidRootPart" then
-					for v = 1,6,1 do
-						local delete = target:FindFirstChild("Decal")
-						delete:Destroy()
-					end
-				end
-			end
-		end
-	end
-	
-	local function unbentall()
-		for i, player in pairs(Players:GetPlayers()) do
-			for _,v in pairs(player.Character:GetChildren()) do
-				local target = player.Character:FindFirstChild(tostring(v))
-				if target.Name ~= "HumanoidRootPart" then
-					for v = 1,6,1 do
-						local delete = target:FindFirstChild("Decal")
-						delete:Destroy()
-					end
-				end
-			end
-		end
-	end
-	
-	script.Parent.BentMe.MouseButton1Down:Connect(fired)
-	script.Parent.BentAll.MouseButton1Down:Connect(bentall)
-	script.Parent.TextBox.FocusLost:Connect(bent)
-	script.Parent.UnBentMe.MouseButton1Down:Connect(unfired)
-	script.Parent.UnBentAll.MouseButton1Down:Connect(unbentall)
-	script.Parent.TextBox2.FocusLost:Connect(unbent) 
-	
+
+	script.Parent.FreezeAllPlayers.MouseButton1Down:Connect(fired)
+	script.Parent.UnFreezeAllPlayers.MouseButton1Down:Connect(unfired)
+	script.Parent.CanGive.OnServerEvent:Connect(item)
+	script.Parent.OnEntered.OnServerEvent:Connect(onentered)
+	script.Parent.NotOnEntered.OnServerEvent:Connect(notonentered)
 end
-	
-	
-	
+
 mainclass()
